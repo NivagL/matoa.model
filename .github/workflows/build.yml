@@ -42,7 +42,7 @@ jobs:
         run: dotnet restore 
     
       - name: Build
-        run: dotnet build --configuration Release --no-restore -p:Version=${{inputs.version}} -p:AssemblyVersion=${{inputs.version}} -p:FileVersion=${{inputs.version}} -p:PackageVersion=${{inputs.version}}
+        run: dotnet build --configuration Release --no-restore -p:Version=${{inputs.version}} -p:AssemblyVersion=${{inputs.version}} -p:FileVersion=${{inputs.version}} -p:PackageVersion=${{inputs.version}} -p:NuGetVersion=${{inputs.version}}
     
       - name: Test
         run: dotnet test --configuration Release --no-build
