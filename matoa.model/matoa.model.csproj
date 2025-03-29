@@ -22,7 +22,7 @@
 
   <Target Name="GenerateTypeModels" AfterTargets="Build">
     <Exec Command="dotnet tool restore" />
-    <Exec Command="dotnet typegen generate -c tgconfig.$(Configuration).json --output-folder D:\Dev\matoa\model\npm\src" />
+    <Exec Command="dotnet typegen generate -c tgconfig.$(Configuration).json --output-folder ..\npm\src" />
   </Target>
   
 </Project>
