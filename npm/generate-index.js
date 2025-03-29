@@ -5,7 +5,7 @@ const path = require('path');
 const modelDir = path.join(__dirname, 'src');
 
 // Output file path
-const indexFilePath = path.join(modelDir, 'index.ts');
+const indexFilePath = path.join('./', 'index.ts');
 
 // Ensure src directory exists
 if (!fs.existsSync(modelDir)) {
@@ -19,7 +19,7 @@ const tsFiles = fs.readdirSync(modelDir)
 // Generate export statements
 const exportStatements = tsFiles.map(file => {
   const baseName = path.basename(file, '.ts');
-  return `export * from './${baseName}';`;
+  return `export * from './src/${baseName}';`;
 }).join('\n');
 
 // Add header comment
