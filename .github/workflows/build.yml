@@ -90,6 +90,6 @@ jobs:
       - name: Publish to GitHub Packages
         run: |
           cd npm
-          npm publish --registry=https://npm.pkg.github.com/NivagL
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{ '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' }}

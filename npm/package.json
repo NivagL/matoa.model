@@ -1,6 +1,5 @@
 {
-  "name": "@matoa/model",
-  "version": "1.0.0",
+  "name": "@NivagL/matoa.model",
   "description": "TypeScript data models for the Matoa application",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
