@@ -75,14 +75,17 @@ jobs:
           npm version $VERSION --no-git-tag-version --prefix npm
 
       - name: Generate index.ts for TypeScript models
-        run: node npm/generate-index.js
+        run: |
+          cd npm
+          node generate-index.js
     
       - name: Build npm package
         run: |
           cd npm
           # Use regular npm install instead of npm ci since no package-lock exists
           npm install
-          npm run build || (echo "TypeScript compilation failed" && tsc --pretty)
+          # Use the tsconfig.json in the npm directory explicitly
+          npm run build --project tsconfig.json || (echo "TypeScript compilation failed" && npx tsc --project tsconfig.json --listFiles --pretty)
     
       - name: Publish to GitHub Packages
         run: |
