@@ -4,33 +4,39 @@ namespace matoa.model;
 
 public static class TupleHelper
 {
-  public static string[] GetStringValues<TKey>(TKey key)
+  public static string[] GetStringValues<T>(T item)
   {
-    if (key == null)
+
+    if (item is null)
     {
-      return new[] { string.Empty };
+      return new string[] { };
     }
 
-    Type t = typeof(TKey);
+    Type t = typeof(T);
 
-    // Check if it's a System.ValueTuple<...>
-    if (t.IsGenericType && t.FullName is not null && t.FullName.StartsWith("System.ValueTuple"))
+    if (t is null)
+    {
+      return new string[] { };
+    }
+
+    if (t.FullName is not null && t.FullName.StartsWith("System.ValueTuple"))
     {
       // ValueTuples store their data in fields named Item1, Item2, etc.
       var fields = t.GetFields(BindingFlags.Public | BindingFlags.Instance);
-      return fields.Select(f => f.GetValue(key)?.ToString() ?? string.Empty).ToArray();
+      return fields.Select(f => f.GetValue(item)?.ToString() ?? string.Empty).ToArray();
     }
 
     // Check if it's a System.Tuple<...>
-    if (t.IsGenericType && t.Namespace == "System" && t.Name.StartsWith("Tuple"))
+    if (t.Namespace == "System" && t.Name.StartsWith("Tuple"))
     {
       // Tuples store their data in properties named Item1, Item2, etc.
       var props = t.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                   .Where(p => p.Name.StartsWith("Item"));
-      return props.Select(p => p.GetValue(key)?.ToString() ?? string.Empty).ToArray();
+                    .Where(p => p.Name.StartsWith("Item"));
+      return props.Select(p => p.GetValue(item)?.ToString() ?? string.Empty)
+        .Where(x => !string.IsNullOrEmpty(x)).ToArray();
     }
 
     // If not a tuple, just return the single value
-    return new[] { key.ToString() ?? string.Empty };
+    return new[] { item.ToString() ?? string.Empty };
   }
 }
