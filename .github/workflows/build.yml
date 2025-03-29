@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+###########################################################
+## Build version
+###########################################################
         
       - name: Set version
         id: versioning
@@ -42,7 +46,7 @@ jobs:
         run: dotnet restore 
     
       - name: Build
-        run: dotnet build --configuration Release --no-restore -p:Version=${{inputs.version}} -p:AssemblyVersion=${{inputs.version}} -p:FileVersion=${{inputs.version}} -p:PackageVersion=${{inputs.version}} -p:NuGetVersion=${{inputs.version}}
+        run: dotnet build --configuration Release --no-restore -p:Version=${{ steps.versioning.outputs.version }} -p:AssemblyVersion=${{ steps.versioning.outputs.version }} -p:FileVersion=${{ steps.versioning.outputs.version }} -p:PackageVersion=${{ steps.versioning.outputs.version }} -p:NuGetVersion=${{ steps.versioning.outputs.version }}
     
       - name: Test
         run: dotnet test --configuration Release --no-build
@@ -55,6 +59,20 @@ jobs:
 ###########################################################
 ## Build npm
 ###########################################################
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          registry-url: 'https://npm.pkg.github.com/'
+          scope: '@${{ github.repository_owner }}'
+    
+      - name: Set version
+        run: |
+          VERSION=${{ steps.versioning.outputs.version }}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # Update package.json version
+          npm version $VERSION --no-git-tag-version --prefix npm
 
       - name: Generate index.ts for TypeScript models
         run: node npm/generate-index.js
