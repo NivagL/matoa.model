@@ -34,12 +34,13 @@ jobs:
     - name: Build npm package
       run: |
         cd npm
-        npm ci
+        # Use regular npm install instead of npm ci since no package-lock exists
+        npm install
         npm run build
     
     - name: Publish to GitHub Packages
       run: |
         cd npm
-        npm publish
+        npm publish --registry=https://npm.pkg.github.com/
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -32,8 +32,11 @@ jobs:
     
     - name: Test
       run: dotnet test --configuration Release --no-build
-    
+   
+    - name: Package Source
+      run: dotnet nuget add source --name github --username NivagL --password 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 --store-password-in-clear-text https://nuget.pkg.github.com/NivagL/index.json
+
     - name: Push to GitHub Packages
-      run: dotnet nuget push ./matoa.model/bin/Release/*.nupkg --skip-duplicate
+      run: dotnet nuget push ./matoa.model/bin/Release/*.nupkg --source github --skip-duplicate
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
