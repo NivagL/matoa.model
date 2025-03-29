@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/NivagL/matoa</RepositoryUrl>
+    <PackageId>matoa.model</PackageId>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
+    <PackageDescription>Matoa data models library</PackageDescription>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TypeGen" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypescriptFiles Include="$(TargetDir)Typescript\*.ts" />
+  </ItemGroup>
+
+  <Target Name="GenerateTypeModels" AfterTargets="Build">
+    <Exec Command="dotnet tool restore" />
+    <Exec Command="dotnet typegen generate -c tgconfig.$(Configuration).json --output-folder D:\Dev\matoa\model\npm\src" />
+  </Target>
+  
+</Project>

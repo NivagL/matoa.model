@@ -1,0 +1,35 @@
+name: Build Matoa Model
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  set-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.versioning.outputs.version }}
+    steps:
+      - name: Set version
+        id: versioning
+        run: |
+          VERSION="1.0.${{ github.run_number }}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+
+  build-nuget:
+    needs: set-version
+    uses: ./.github/workflows/build-nuget.yml
+    with:
+      version: ${{ needs.set-version.outputs.version }}
+    secrets: inherit
+
+  build-npm:
+    needs: build-nuget
+    uses: ./.github/workflows/build-npm.yml
+    with:
+      version: ${{ needs.set-version.outputs.version }}
+    secrets: inherit

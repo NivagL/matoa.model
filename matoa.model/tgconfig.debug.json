@@ -1,0 +1,14 @@
+{
+  "assemblies": [ "bin/debug/net8.0/matoa.model.dll" ],
+  "generationSpecs": [ "TypescriptExportSpec" ],
+  "defaultValuesForTypes": {
+    "number": "-1",
+    "Date": "null",
+    "string": "\"\"",
+    "boolean": "false",
+    "type": "null",
+    "class": "null",
+    "nullable":  "type | null"
+  },
+  "csNullableTranslation": "type | null"
+}

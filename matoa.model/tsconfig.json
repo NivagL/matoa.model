@@ -1,0 +1,36 @@
+{
+  "assemblies": [ "matoa.model.dll" ],
+  "fileNameConverters": [ "converters/MyApp.Converters.dll:StripDto", "PascalCaseToKebabCase" ],
+  "typeNameConverters": [ "converters/MyApp.Converters.dll:Fqcn.Converters.StripDto" ],
+  "propertyNameConverters": [],
+  "enumValueNameConverters": [ "UnderscoreCaseToPascalCase" ],
+  "typeScriptFileExtension": "ts",
+  "tabLength": 2,
+  "explicitPublicAccessor": true,
+  "defaultValuesForTypes": {
+    "number": "-1",
+    "Date": "null",
+    "string": "\"\"",
+    "boolean": "false",
+    "type": "null"
+  },
+  "customTypeMappings": {
+    "System.DateTime": "string",
+  },
+  "typeUnionsForTypes": {
+    "string": [ "null", "undefined" ],
+    "Date": [ "string" ]
+  }
+}
+
+//{
+//  "generationSpecs": [
+//    {
+//      "typeName": "Namespace.To.Your.Models.*",
+//      "outputPath": "../path/to/typescript/output"
+//    }
+//  ],
+//  "baseOutputDirectory": "path/to/typescript/output",
+//  "addFilesToProject": true,
+//  "createIndexFile": true
+//}

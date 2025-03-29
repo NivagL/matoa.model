@@ -1,0 +1,45 @@
+name: Build and Publish npm Package
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        registry-url: 'https://npm.pkg.github.com/'
+        scope: '@${{ github.repository_owner }}'
+    
+    - name: Set version
+      run: |
+        VERSION=${{ inputs.version }}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        # Update package.json version
+        npm version $VERSION --no-git-tag-version --prefix npm
+    
+    - name: Generate index.ts for TypeScript models
+      run: node npm/generate-index.js
+    
+    - name: Build npm package
+      run: |
+        cd npm
+        npm ci
+        npm run build
+    
+    - name: Publish to GitHub Packages
+      run: |
+        cd npm
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
