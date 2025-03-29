@@ -35,7 +35,7 @@ jobs:
    
     - name: Configure GitHub NuGet Source
       run: |
-        dotnet nuget remove source github
+        # dotnet nuget remove source github
         dotnet nuget add source --name github --username NivagL --password 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 --store-password-in-clear-text https://nuget.pkg.github.com/NivagL/index.json
 
     - name: List NuGet Packages
