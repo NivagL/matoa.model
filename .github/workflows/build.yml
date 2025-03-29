@@ -84,8 +84,8 @@ jobs:
           cd npm
           # Use regular npm install instead of npm ci since no package-lock exists
           npm install
-          # Use the tsconfig.json in the npm directory explicitly
-          npm run build --project tsconfig.json || (echo "TypeScript compilation failed" && npx tsc --project tsconfig.json --listFiles --pretty)
+          # Fix: correct syntax for specifying tsconfig with tsc
+          npm run build || (echo "TypeScript compilation failed" && npx tsc --listFiles --pretty)
     
       - name: Publish to GitHub Packages
         run: |
