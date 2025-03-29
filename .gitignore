@@ -52,3 +52,7 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+/.vs/matoa.model/copilot-chat/33519a62/sessions
+/.vs/matoa.model/DesignTimeBuild
+/.vs/matoa.model/FileContentIndex
+/.vs/matoa.model/v17
