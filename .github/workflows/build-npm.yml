@@ -36,7 +36,7 @@ jobs:
         cd npm
         # Use regular npm install instead of npm ci since no package-lock exists
         npm install
-        npm run build
+        npm run build || (echo "TypeScript compilation failed" && tsc --pretty)
     
     - name: Publish to GitHub Packages
       run: |
