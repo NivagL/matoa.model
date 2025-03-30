@@ -1,9 +1,4 @@
-name: Build Matoa Model
-
-env:
-  project: matoa.model  
-  major: 1
-  minor: 0
+name: Build Common Model
 
 on:
   push:
@@ -12,89 +7,29 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  build-model:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.versioning.outputs.version }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  set-version:
+    uses: NivagL/Common.Tools/.github/workflows/BuildVersion.yml@main
+    with:
+      major: 1
+      minor: 0
 
-###########################################################
-## Build version
-###########################################################
-        
-      - name: Set version
-        id: versioning
-        run: |
-          VERSION="${{env.major}}.${{env.minor}}.${{ github.run_number }}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Generated version: $VERSION"
+  build-nuget-package:
+    needs: set-version
+    uses: NivagL/Common.Tools/.github/workflows/BuildNuget.yml@main
+    with:
+      project: 'matoa.model'
+      version: ${{ needs.set-version.outputs['build-version'] }}
+    secrets: inherit
 
-###########################################################
-## Build nuget package
-###########################################################
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
-          source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}  # Updated to use GH_PACKAGES
-    
-      - name: Restore .NET tools
-        run: dotnet tool restore --configfile nuget.config
-    
-      - name: Restore dependencies
-        run: dotnet restore --configfile nuget.config
-    
-      - name: Build
-        run: dotnet build --configuration Release --no-restore -p:Version=${{ steps.versioning.outputs.version }} -p:AssemblyVersion=${{ steps.versioning.outputs.version }} -p:FileVersion=${{ steps.versioning.outputs.version }} -p:PackageVersion=${{ steps.versioning.outputs.version }} -p:NuGetVersion=${{ steps.versioning.outputs.version }}
-    
-      - name: Test
-        run: dotnet test --configuration Release --no-build
-   
-      - name: Push to GitHub Packages
-        run: dotnet nuget push ./**/bin/Release/*.nupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --skip-duplicate
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}  # Ensure correct token is used
-
-###########################################################
-## Build npm
-###########################################################
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          registry-url: 'https://npm.pkg.github.com/'
-          scope: '@${{ github.repository_owner }}'
-    
-      - name: Set version
-        run: |
-          VERSION=${{ steps.versioning.outputs.version }}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          # Update package.json version
-          npm version $VERSION --no-git-tag-version --prefix npm
-
-      - name: Generate index.ts for TypeScript models
-        run: |
-          cd npm
-          node generate-index.js
-    
-      - name: Build npm package
-        run: |
-          cd npm
-          # Use regular npm install instead of npm ci since no package-lock exists
-          npm install
-          # Fix: correct syntax for specifying tsconfig with tsc
-          npm run build || (echo "TypeScript compilation failed" && npx tsc --listFiles --pretty)
-    
-      - name: Publish to GitHub Packages
-        run: |
-          cd npm
-          npm publish
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}
+  build-npm-package:
+    needs: build-nuget-package
+    uses: NivagL/Common.Tools/.github/workflows/BuildNpm.yml@main
+    with:
+      project: 'matoa.model'
+      version: ${{ needs.set-version.outputs['build-version'] }}
+    secrets: inherit
