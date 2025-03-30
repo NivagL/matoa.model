@@ -57,7 +57,7 @@ jobs:
         run: dotnet test --configuration Release --no-build
    
       - name: Push to GitHub Packages
-        run: dotnet nuget push ./${{ env.project }}/bin/Release/*.nupkg --source github --skip-duplicate
+        run: dotnet nuget push ./**/bin/Release/*.nupkg --source github --skip-duplicate
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}
 
@@ -97,4 +97,4 @@ jobs:
           cd npm
           npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ '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' }}
+          NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}
