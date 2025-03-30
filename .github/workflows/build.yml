@@ -57,7 +57,7 @@ jobs:
         run: dotnet test --configuration Release --no-build
    
       - name: Push to GitHub Packages
-        run: dotnet nuget push ./**/bin/Release/*.nupkg --source github --skip-duplicate
+        run: dotnet nuget push ./**/bin/Release/*.nupkg --source https://nuget.pkg.github.com/NivagL/index.json --skip-duplicate
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}
 
