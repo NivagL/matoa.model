@@ -1,5 +1,10 @@
 name: Build Matoa Model
 
+env:
+  project: matoa.model  
+  major: 1
+  minor: 0
+
 on:
   push:
     branches: [ main ]
@@ -23,7 +28,7 @@ jobs:
       - name: Set version
         id: versioning
         run: |
-          VERSION="1.0.${{ github.run_number }}"
+          VERSION="${{env.major}}.${{env.minor}}.${{ github.run_number }}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Generated version: $VERSION"
 
@@ -43,7 +48,7 @@ jobs:
         run: dotnet tool restore --configfile nuget.config
     
       - name: Restore dependencies
-        run: dotnet restore 
+        run: dotnet restore --configfile nuget.config
     
       - name: Build
         run: dotnet build --configuration Release --no-restore -p:Version=${{ steps.versioning.outputs.version }} -p:AssemblyVersion=${{ steps.versioning.outputs.version }} -p:FileVersion=${{ steps.versioning.outputs.version }} -p:PackageVersion=${{ steps.versioning.outputs.version }} -p:NuGetVersion=${{ steps.versioning.outputs.version }}
@@ -52,9 +57,9 @@ jobs:
         run: dotnet test --configuration Release --no-build
    
       - name: Push to GitHub Packages
-        run: dotnet nuget push ./matoa.model/bin/Release/*.nupkg --source github --skip-duplicate
+        run: dotnet nuget push ./${{ env.project }}/bin/Release/*.nupkg --source github --skip-duplicate
         env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUGET_AUTH_TOKEN: ${{ secrets.GH_PACKAGES }}
 
 ###########################################################
 ## Build npm
