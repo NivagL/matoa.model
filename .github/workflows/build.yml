@@ -1,4 +1,4 @@
-name: Build Common Model
+name: Build Matoa Model
 
 on:
   push:
@@ -13,14 +13,14 @@ permissions:
 
 jobs:
   set-version:
-    uses: NivagL/Common.Tools/.github/workflows/BuildVersion.yml@main
+    uses: NivagL/Common.Tools/.github/workflows/build-version.yml@main
     with:
       major: 1
       minor: 0
 
   build-nuget-package:
     needs: set-version
-    uses: NivagL/Common.Tools/.github/workflows/BuildNuget.yml@main
+    uses: NivagL/Common.Tools/.github/workflows/build-model-nuget.yml@main
     with:
       project: 'matoa.model'
       version: ${{ needs.set-version.outputs['build-version'] }}
@@ -28,7 +28,7 @@ jobs:
 
   build-npm-package:
     needs: build-nuget-package
-    uses: NivagL/Common.Tools/.github/workflows/BuildNpm.yml@main
+    uses: NivagL/Common.Tools/.github/workflows/build-model-npm.yml@main
     with:
       project: 'matoa.model'
       version: ${{ needs.set-version.outputs['build-version'] }}
