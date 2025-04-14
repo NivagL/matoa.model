@@ -1,5 +1,6 @@
-﻿using TypeGen.Core.SpecGeneration;
-namespace matoa.model;
+﻿using Common.Model;
+using TypeGen.Core.SpecGeneration;
+namespace Matoa.Model;
 
 public class TypescriptExportSpec : GenerationSpec
 {

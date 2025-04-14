@@ -1,4 +1,4 @@
-﻿namespace matoa.model;
+﻿namespace Matoa.Model;
 
 public enum RoleEnum
 {

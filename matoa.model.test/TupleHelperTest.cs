@@ -1,4 +1,6 @@
-﻿namespace matoa.model.test;
+﻿using Common.Model;
+
+namespace Matoa.Model.Test;
 
 [TestClass]
 [TestCategory("Unit")]

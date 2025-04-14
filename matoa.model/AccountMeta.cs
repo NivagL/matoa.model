@@ -1,4 +1,5 @@
-﻿using matoa.model;
+﻿using Common.Model;
+namespace Matoa.Model;
 
 public class AccountMeta : IModelMeta<Guid, Account>
 {

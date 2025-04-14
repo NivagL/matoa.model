@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-
-namespace matoa.model;
+namespace Matoa.Model;
 
 public class Role
 {

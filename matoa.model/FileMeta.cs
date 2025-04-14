@@ -1,17 +1,18 @@
-﻿using matoa.model;
+﻿using Common.Model;
+namespace Matoa.Model;
 
-public class FileMeta : IModelMeta<Guid, matoa.model.File>
+public class FileMeta : IModelMeta<Guid, Matoa.Model.File>
 {
-  public Func<matoa.model.File, Guid> Key { get; set; } = x => x.StreamId;
+  public Func<Matoa.Model.File, Guid> Key { get; set; } = x => x.StreamId;
 
-  public Action<matoa.model.File, matoa.model.File> Assign { get; set; } = (source, target) =>
+  public Action<Matoa.Model.File, Matoa.Model.File> Assign { get; set; } = (source, target) =>
   {
     source.FileStream = target.FileStream;
     source.Name = target.Name;
     source.FileType = target.FileType;
   };
 
-  public Func<matoa.model.File, matoa.model.File, bool> Equal { get; set; } = (left, right) =>
+  public Func<Matoa.Model.File, Matoa.Model.File, bool> Equal { get; set; } = (left, right) =>
   {
     return left.FileStream == right.FileStream
       && left.Name == right.Name

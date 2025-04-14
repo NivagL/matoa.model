@@ -1,4 +1,4 @@
-﻿namespace matoa.model;
+﻿namespace Matoa.Model;
 
 public class RegistrationContactMapper : IMapper<Registration, Contact>
 {

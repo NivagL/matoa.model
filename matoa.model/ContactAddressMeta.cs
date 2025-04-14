@@ -1,4 +1,5 @@
-﻿namespace matoa.model;
+﻿using Common.Model;
+namespace Matoa.Model;
 
 public class ContactAddressMeta : IModelMeta<(int ContactId, int AddressId), ContactAddress>
 {
